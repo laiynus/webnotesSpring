@@ -2,21 +2,27 @@ package by.khrapovitsky.dao;
 
 import by.khrapovitsky.model.Note;
 import by.khrapovitsky.model.User;
-import by.khrapovitsky.util.HibernateUtil;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class NotesDAOImplement implements NotesDAO {
+
+    @Autowired
+    private SessionFactory sessionFactory;
 
     public void delete(Note note) {
         Session session = null;
         try {
-            session = HibernateUtil.getSessionFactory().openSession();
+            session = sessionFactory.getCurrentSession();;
             session.beginTransaction();
             session.delete(note);
             session.getTransaction().commit();
@@ -32,7 +38,7 @@ public class NotesDAOImplement implements NotesDAO {
     public void insert(Note note) {
         Session session = null;
         try {
-            session = HibernateUtil.getSessionFactory().openSession();
+            session = sessionFactory.getCurrentSession();;
             session.beginTransaction();
             session.save(note);
             session.getTransaction().commit();
@@ -48,7 +54,7 @@ public class NotesDAOImplement implements NotesDAO {
     public void update(Note note) {
         Session session = null;
         try {
-            session = HibernateUtil.getSessionFactory().openSession();
+            session = sessionFactory.getCurrentSession();;
             session.beginTransaction();
             session.update(note);
             session.getTransaction().commit();
@@ -65,7 +71,7 @@ public class NotesDAOImplement implements NotesDAO {
         Session session = null;
         List notes = new ArrayList();
         try {
-            session = HibernateUtil.getSessionFactory().openSession();
+            session = sessionFactory.getCurrentSession();;
             notes = session.createCriteria(Note.class).list();
         } catch (Exception e) {
             e.printStackTrace();
@@ -81,7 +87,7 @@ public class NotesDAOImplement implements NotesDAO {
         Session session = null;
         Note note = null;
         try {
-            session = HibernateUtil.getSessionFactory().openSession();
+            session = sessionFactory.getCurrentSession();;
             note = (Note) session.get(Note.class, id);
 
         } catch (Exception e) {
@@ -98,7 +104,7 @@ public class NotesDAOImplement implements NotesDAO {
         Session session = null;
         Note note = null;
         try {
-            session = HibernateUtil.getSessionFactory().openSession();
+            session = sessionFactory.getCurrentSession();;
             note = (Note) session.get(Note.class, id);
             Hibernate.initialize(note.getUser());
         } catch (Exception e) {
@@ -115,7 +121,7 @@ public class NotesDAOImplement implements NotesDAO {
         Session session = null;
         List notes = new ArrayList();
         try {
-            session = HibernateUtil.getSessionFactory().openSession();
+            session = sessionFactory.getCurrentSession();;
             notes = session.createCriteria(Note.class).add(Restrictions.like("user", user)).addOrder(Order.desc("dateTimeCreate")).setMaxResults(10).list();
         } catch (Exception e) {
             e.printStackTrace();
@@ -131,7 +137,7 @@ public class NotesDAOImplement implements NotesDAO {
         Session session = null;
         List notes = new ArrayList();
         try {
-            session = HibernateUtil.getSessionFactory().openSession();
+            session = sessionFactory.getCurrentSession();;
             notes = session.createCriteria(Note.class).add(Restrictions.like("user", user)).addOrder(Order.desc("dateTimeCreate")).list();
         } catch (Exception e) {
             e.printStackTrace();

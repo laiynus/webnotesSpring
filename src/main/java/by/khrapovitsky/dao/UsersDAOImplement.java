@@ -1,18 +1,24 @@
 package by.khrapovitsky.dao;
 
 import by.khrapovitsky.model.User;
-import by.khrapovitsky.util.HibernateUtil;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.ArrayList;
 
+@Repository
 public class UsersDAOImplement implements UsersDAO {
+
+    @Autowired
+    private SessionFactory sessionFactory;
 
     public void delete(User user) {
         Session session = null;
         try {
-            session = HibernateUtil.getSessionFactory().openSession();
+            session = sessionFactory.getCurrentSession();
             session.beginTransaction();
             session.delete(user);
             session.getTransaction().commit();
@@ -28,7 +34,7 @@ public class UsersDAOImplement implements UsersDAO {
     public void insert(User user) {
         Session session = null;
         try {
-            session = HibernateUtil.getSessionFactory().openSession();
+            session = sessionFactory.getCurrentSession();
             session.beginTransaction();
             session.save(user);
             session.getTransaction().commit();
@@ -45,7 +51,7 @@ public class UsersDAOImplement implements UsersDAO {
     public void update(User user) {
         Session session = null;
         try {
-            session = HibernateUtil.getSessionFactory().openSession();
+            session = sessionFactory.getCurrentSession();
             session.beginTransaction();
             session.update(user);
             session.getTransaction().commit();
@@ -62,7 +68,7 @@ public class UsersDAOImplement implements UsersDAO {
         Session session = null;
         List users = new ArrayList();
         try {
-            session = HibernateUtil.getSessionFactory().openSession();
+            session = sessionFactory.getCurrentSession();
             users = session.createCriteria(User.class).list();
         } catch (Exception e) {
             e.printStackTrace();
@@ -78,7 +84,7 @@ public class UsersDAOImplement implements UsersDAO {
         Session session = null;
         User user = null;
         try {
-            session = HibernateUtil.getSessionFactory().openSession();
+            session = sessionFactory.getCurrentSession();
             user = (User) session.get(User.class, login);
         } catch (Exception e) {
             e.printStackTrace();
