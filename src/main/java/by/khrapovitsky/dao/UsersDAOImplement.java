@@ -81,18 +81,8 @@ public class UsersDAOImplement implements UsersDAO {
     }
 
     public User getUser(String login) {
-        Session session = null;
-        User user = null;
-        try {
-            session = sessionFactory.getCurrentSession();
-            user = (User) session.get(User.class, login);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (session != null && session.isOpen()) {
-                session.close();
-            }
-        }
-        return user;
+
+        return (User) sessionFactory.getCurrentSession().get(User.class,login);
+
     }
 }

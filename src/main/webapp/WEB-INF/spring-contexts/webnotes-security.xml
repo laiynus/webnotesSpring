@@ -7,10 +7,16 @@
        http://www.springframework.org/schema/security
        http://www.springframework.org/schema/security/spring-security.xsd">
 
-    <security:http pattern="/resources/**" security="none"/>
-
+    <security:http pattern="/" security="none"/>
 
     <security:http auto-config="true">
+        <security:intercept-url pattern="/lastnotes" access="hasRole('ROLE_USER')" />
+        <security:access-denied-handler error-page="/403" />
+        <security:form-login login-page="/login"
+                             login-processing-url="/loginProcess"
+                             default-target-url="/lastnotes"
+                             authentication-failure-url="/login?error" />
+        <security:logout logout-success-url="/login?logout" />
     </security:http>
 
     <security:authentication-manager>

@@ -1,11 +1,12 @@
 package by.khrapovitsky.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 @Entity
 @Table(name = "notes")
-public class Note {
+public class Note implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
