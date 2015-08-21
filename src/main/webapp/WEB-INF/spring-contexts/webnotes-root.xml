@@ -8,7 +8,7 @@
 
        <context:component-scan base-package="by.khrapovitsky.dao, by.khrapovitsky.service"/>
 
-       <import resource="webnotes-database.xml" />
+       <import resource="webnotes-orm.xml" />
        <import resource="webnotes-security.xml" />
 
 </beans>

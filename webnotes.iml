@@ -19,7 +19,13 @@
           <file>file://$MODULE_DIR$/src/main/webapp/WEB-INF/spring-contexts/webnotes-database.xml</file>
           <file>file://$MODULE_DIR$/src/main/webapp/WEB-INF/spring-contexts/webnotes-security.xml</file>
         </fileset>
-       </configuration>
+        <fileset id="web application context" name="MVC application context" removed="true">
+          <file>file://$MODULE_DIR$/src/main/webapp/WEB-INF/spring-contexts/webnotes-root.xml</file>
+        </fileset>
+        <fileset id="web webnotes servlet context" name="MVC webnotes servlet context" removed="true">
+          <file>file://$MODULE_DIR$/src/main/webapp/WEB-INF/spring-contexts/webnotes-servlet.xml</file>
+        </fileset>
+      </configuration>
     </facet>
   </component>
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8" inherit-compiler-output="false">

@@ -20,132 +20,36 @@ public class NotesDAOImplement implements NotesDAO {
     private SessionFactory sessionFactory;
 
     public void delete(Note note) {
-        Session session = null;
-        try {
-            session = sessionFactory.getCurrentSession();;
-            session.beginTransaction();
-            session.delete(note);
-            session.getTransaction().commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (session != null && session.isOpen()) {
-                session.close();
-            }
-        }
+        sessionFactory.getCurrentSession().delete(note);
     }
 
     public void insert(Note note) {
-        Session session = null;
-        try {
-            session = sessionFactory.getCurrentSession();;
-            session.beginTransaction();
-            session.save(note);
-            session.getTransaction().commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (session != null && session.isOpen()) {
-                session.close();
-            }
-        }
+        sessionFactory.getCurrentSession().save(note);
     }
 
     public void update(Note note) {
-        Session session = null;
-        try {
-            session = sessionFactory.getCurrentSession();;
-            session.beginTransaction();
-            session.update(note);
-            session.getTransaction().commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (session != null && session.isOpen()) {
-                session.close();
-            }
-        }
+        sessionFactory.getCurrentSession().update(note);
     }
 
     public List<Note> getAllNotes() {
-        Session session = null;
-        List notes = new ArrayList();
-        try {
-            session = sessionFactory.getCurrentSession();;
-            notes = session.createCriteria(Note.class).list();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (session != null && session.isOpen()) {
-                session.close();
-            }
-        }
-        return notes;
+        return sessionFactory.getCurrentSession().createCriteria(Note.class).list();
     }
 
     public Note getNote(int id) {
-        Session session = null;
-        Note note = null;
-        try {
-            session = sessionFactory.getCurrentSession();;
-            note = (Note) session.get(Note.class, id);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (session != null && session.isOpen()) {
-                session.close();
-            }
-        }
-        return note;
+        return (Note) sessionFactory.getCurrentSession().get(Note.class, id);
     }
 
     public Note getNoteWithUser(int id) {
-        Session session = null;
-        Note note = null;
-        try {
-            session = sessionFactory.getCurrentSession();;
-            note = (Note) session.get(Note.class, id);
-            Hibernate.initialize(note.getUser());
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (session != null && session.isOpen()) {
-                session.close();
-            }
-        }
+        Note note = (Note) sessionFactory.getCurrentSession().get(Note.class,id);
+        Hibernate.initialize(note.getUser());
         return note;
     }
 
     public List<Note> getLastUserNotes(User user) {
-        Session session = null;
-        List notes = new ArrayList();
-        try {
-            session = sessionFactory.getCurrentSession();;
-            notes = session.createCriteria(Note.class).add(Restrictions.like("user", user)).addOrder(Order.desc("dateTimeCreate")).setMaxResults(10).list();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (session != null && session.isOpen()) {
-                session.close();
-            }
-        }
-        return notes;
+        return sessionFactory.getCurrentSession().createCriteria(Note.class).add(Restrictions.like("user", user)).addOrder(Order.desc("dateTimeCreate")).setMaxResults(10).list();
     }
 
     public List<Note> getUserNotes(User user) {
-        Session session = null;
-        List notes = new ArrayList();
-        try {
-            session = sessionFactory.getCurrentSession();;
-            notes = session.createCriteria(Note.class).add(Restrictions.like("user", user)).addOrder(Order.desc("dateTimeCreate")).list();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (session != null && session.isOpen()) {
-                session.close();
-            }
-        }
-        return notes;
+        return sessionFactory.getCurrentSession().createCriteria(Note.class).add(Restrictions.like("user", user)).addOrder(Order.desc("dateTimeCreate")).list();
     }
 }

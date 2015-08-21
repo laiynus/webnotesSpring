@@ -1,13 +1,12 @@
 package by.khrapovitsky.dao;
 
 import by.khrapovitsky.model.User;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.ArrayList;
+
 
 @Repository
 public class UsersDAOImplement implements UsersDAO {
@@ -16,73 +15,22 @@ public class UsersDAOImplement implements UsersDAO {
     private SessionFactory sessionFactory;
 
     public void delete(User user) {
-        Session session = null;
-        try {
-            session = sessionFactory.getCurrentSession();
-            session.beginTransaction();
-            session.delete(user);
-            session.getTransaction().commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (session != null && session.isOpen()) {
-                session.close();
-            }
-        }
+       sessionFactory.getCurrentSession().delete(user);
     }
 
     public void insert(User user) {
-        Session session = null;
-        try {
-            session = sessionFactory.getCurrentSession();
-            session.beginTransaction();
-            session.save(user);
-            session.getTransaction().commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (session != null && session.isOpen()) {
-
-                session.close();
-            }
-        }
+        sessionFactory.getCurrentSession().save(user);
     }
 
     public void update(User user) {
-        Session session = null;
-        try {
-            session = sessionFactory.getCurrentSession();
-            session.beginTransaction();
-            session.update(user);
-            session.getTransaction().commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (session != null && session.isOpen()) {
-                session.close();
-            }
-        }
+        sessionFactory.getCurrentSession().update(user);
     }
 
     public List<User> getAllUsers() {
-        Session session = null;
-        List users = new ArrayList();
-        try {
-            session = sessionFactory.getCurrentSession();
-            users = session.createCriteria(User.class).list();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (session != null && session.isOpen()) {
-                session.close();
-            }
-        }
-        return users;
+        return sessionFactory.getCurrentSession().createCriteria(User.class).list();
     }
 
     public User getUser(String login) {
-
-        return (User) sessionFactory.getCurrentSession().get(User.class,login);
-
+        return (User) sessionFactory.getCurrentSession().get(User.class, login);
     }
 }
