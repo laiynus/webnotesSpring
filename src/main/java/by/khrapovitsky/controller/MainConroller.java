@@ -8,13 +8,11 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class MainConroller {
 
-
-
     @RequestMapping(value = { "/", "/home**" }, method = RequestMethod.GET)
     public ModelAndView defaultPage() {
 
         ModelAndView model = new ModelAndView();
-        model.setViewName("index");
+        model.setViewName("home");
         return model;
 
     }

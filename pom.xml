@@ -15,6 +15,7 @@
         <spring-framework.version>4.1.6.RELEASE</spring-framework.version>
         <spring-security.version>4.0.0.RELEASE</spring-security.version>
         <hibernate.version>4.3.8.Final</hibernate.version>
+        <jackson.version>2.6.0</jackson.version>
     </properties>
 
     <developers>
@@ -91,7 +92,6 @@
             <version>${spring-security.version}</version>
         </dependency>
 
-
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-web</artifactId>
@@ -111,9 +111,15 @@
         </dependency>
 
         <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>3.3.2</version>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
         </dependency>
 
     </dependencies>
