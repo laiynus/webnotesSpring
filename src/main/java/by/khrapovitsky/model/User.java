@@ -16,18 +16,44 @@ public class User implements UserDetails,Serializable{
 
     @Id
     @Column(name = "login",unique = true,nullable = false)
-    String login;
+    String username;
     @Column(name = "password",nullable = false)
     String password;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user",fetch=FetchType.LAZY)
     private List<Note> notes;
 
-    public String getLogin() {
-        return login;
+    public User() {
     }
 
-    public void setLogin(String login) {
-        this.login = login;
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
+
+    @Override
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public List<Note> getNotes() {
+        return notes;
+    }
+
+    public void setNotes(List<Note> notes) {
+        this.notes = notes;
     }
 
     @Override
@@ -35,15 +61,6 @@ public class User implements UserDetails,Serializable{
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
         return authorities;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    @Override
-    public String getUsername() {
-        return login;
     }
 
     @Override
@@ -65,26 +82,4 @@ public class User implements UserDetails,Serializable{
     public boolean isEnabled() {
         return true;
     }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public List<Note> getNotes() {
-        return notes;
-    }
-
-    public void setNotes(List<Note> notes) {
-        this.notes = notes;
-    }
-
-    public User(String login, String password) {
-        this.login = login;
-        this.password = password;
-    }
-
-    public User() {
-    }
-
-
 }

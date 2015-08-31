@@ -15,7 +15,7 @@
         <spring-framework.version>4.1.6.RELEASE</spring-framework.version>
         <spring-security.version>4.0.0.RELEASE</spring-security.version>
         <hibernate.version>4.3.8.Final</hibernate.version>
-        <jackson.version>2.6.0</jackson.version>
+        <jackson.version>2.6.1</jackson.version>
     </properties>
 
     <developers>
@@ -111,25 +111,35 @@
         </dependency>
 
         <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-core</artifactId>
-            <version>${jackson.version}</version>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.3.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-hibernate4</artifactId>
+            <version>2.5.3</version>
         </dependency>
 
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>${jackson.version}</version>
+            <version>2.6.0</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.6.0</version>
+        </dependency>
+
 
     </dependencies>
 
     <build>
-
         <finalName>webnotes</finalName>
-
         <plugins>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -139,9 +149,7 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
-
         </plugins>
-
     </build>
 
 </project>
