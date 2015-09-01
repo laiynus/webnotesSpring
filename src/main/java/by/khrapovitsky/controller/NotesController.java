@@ -50,4 +50,33 @@ public class NotesController {
         return lastNotesList;
     }
 
+    @RequestMapping(value = "getAllNotes",method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody List<Note> getAllNotes(){
+        List<Note> allNotesList = new ArrayList<>();
+        if(SecurityContextHolder.getContext().getAuthentication().isAuthenticated()){
+            allNotesList = notesService.getUserNotes(new User(SecurityContextHolder.getContext().getAuthentication().getName(), null));
+        }
+        return allNotesList;
+    }
+
+    @RequestMapping(value = "deleteNote",method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody String deleteNote(@RequestBody Note tmpNote){
+        if(SecurityContextHolder.getContext().getAuthentication().isAuthenticated()){
+            Note note = notesService.getNoteWithUser(tmpNote.getId());
+            String username = note.getUser().getUsername();
+            if(note!=null || username.equals(SecurityContextHolder.getContext().getAuthentication().getName())){
+                notesService.delete(note);
+                return "Success";
+            }
+        }
+        return "Fail";
+    }
+
+    @RequestMapping(value = "editNote",method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void editNote(@RequestBody Note note){
+        if(SecurityContextHolder.getContext().getAuthentication().isAuthenticated()){
+            notesService.update(note);
+        }
+    }
+
 }

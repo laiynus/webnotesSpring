@@ -24,22 +24,35 @@
         <div class="panel-heading">
             <div class="panel-title">Your note</div>
         </div>
-        <div class="input-group">
+        <div class="panel-body">
+            <button class="btn btn-success" id="addNote">Add note</button>
+            <button class="btn btn-warning" id="editNote" disabled="true">Edit note</button>
+            <button class="btn btn-danger" id="deleteNote" disabled="true">Delete note</button>
+            <br>
+            <br>
             <textarea class="form-control custom-control" id="noteText" rows="3" style="resize:vertical" placeholder="Enter your note"></textarea>
-            <span class="input-group-addon btn btn-success" id="addNote">Add note</span>
-            <span class="input-group-addon btn btn-warning" id="editNote">Edit note</span>
         </div>
     </div>
 </div>
-<table class="table table-striped table-hover " id="noteTable">
-    <thead>
-    <tr>
-        <th>Note</th>
-        <th>Date of modify</th>
-    </tr>
-    </thead>
-    <tbody id="noteTableBody">
-    </tbody>
-</table>
+<div class="container">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="panel-title">Your last notes</div>
+        </div>
+        <div class="panel-body">
+            <table class="table table-striped table-bordered" id="noteTable">
+                <thead>
+                <tr>
+                    <th>Note</th>
+                    <th>Date of modify</th>
+                    <th>Select</th>
+                </tr>
+                </thead>
+                <tbody id="noteTableBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 </body>
 </html>
