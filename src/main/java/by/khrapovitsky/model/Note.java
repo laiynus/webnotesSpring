@@ -24,8 +24,6 @@ public class Note implements Serializable{
         return id;
     }
 
-
-
     public String getNote() {
         return note;
     }

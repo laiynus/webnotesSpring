@@ -19,12 +19,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
+@RequestMapping(value = {"/notes"})
 public class NotesController {
 
     @Autowired
     private NotesService notesService;
 
-    @RequestMapping(value = {"/notes"}, method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET)
     public ModelAndView defaultPage() {
         ModelAndView model = new ModelAndView();
         model.setViewName("notes");
@@ -63,20 +64,43 @@ public class NotesController {
     public @ResponseBody String deleteNote(@RequestBody Note tmpNote){
         if(SecurityContextHolder.getContext().getAuthentication().isAuthenticated()){
             Note note = notesService.getNoteWithUser(tmpNote.getId());
-            String username = note.getUser().getUsername();
-            if(note!=null || username.equals(SecurityContextHolder.getContext().getAuthentication().getName())){
-                notesService.delete(note);
-                return "Success";
+            if (note != null) {
+                if(note.getUser().getUsername().equals(SecurityContextHolder.getContext().getAuthentication().getName())){
+                    notesService.delete(note);
+                    return "Success";
+                }
             }
         }
         return "Fail";
     }
 
     @RequestMapping(value = "editNote",method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void editNote(@RequestBody Note note){
+    public @ResponseBody String editNote(@RequestBody Note tmpNote){
         if(SecurityContextHolder.getContext().getAuthentication().isAuthenticated()){
-            notesService.update(note);
+            Note note = notesService.getNoteWithUser(tmpNote.getId());
+            if (note != null) {
+                if(note.getUser().getUsername().equals(SecurityContextHolder.getContext().getAuthentication().getName())){
+                    note.setDateTimeCreate( new Timestamp(new java.util.Date().getTime()));
+                    note.setNote(tmpNote.getNote());
+                    notesService.update(note);
+                    return "Success";
+                }
+            }
         }
+        return "Fail";
+    }
+
+    @RequestMapping(value = "getNote",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody Note getNote(@RequestBody Note note){
+        if(SecurityContextHolder.getContext().getAuthentication().isAuthenticated()){
+           if(notesService.getNote(note.getId())!=null){
+               if(notesService.getNoteWithUser(note.getId()).getUser().getUsername().equals(SecurityContextHolder.getContext().getAuthentication().getName())){
+                   Note requestNote = notesService.getNote(note.getId());
+                   return requestNote;
+               }
+           }
+        }
+        return null;
     }
 
 }

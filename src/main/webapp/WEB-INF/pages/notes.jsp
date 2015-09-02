@@ -30,16 +30,11 @@
             <button class="btn btn-danger" id="deleteNote" disabled="true">Delete note</button>
             <br>
             <br>
+            <input hidden id="selectedNote" />
             <textarea class="form-control custom-control" id="noteText" rows="3" style="resize:vertical" placeholder="Enter your note"></textarea>
-        </div>
-    </div>
-</div>
-<div class="container">
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <div class="panel-title">Your last notes</div>
-        </div>
-        <div class="panel-body">
+            <br>
+            <br>
+            <br>
             <table class="table table-striped table-bordered" id="noteTable">
                 <thead>
                 <tr>
