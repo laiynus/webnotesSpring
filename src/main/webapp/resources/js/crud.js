@@ -87,13 +87,31 @@ $(document).ready(function () {
         })
     })
 
+    $("#switcherNote").click(function switcherNote(){
+        if($("#switcher").val()==="last"){
+            $("#switcher").val("all");
+            getLastNotes();
+            $("#switcherNote").html('Show last notes');
+        }else{
+            $("#switcher").val("last");
+            getLastNotes();
+            $("#switcherNote").html('Show all notes');
+        }
+    })
+
 });
 
 $(document).ready(getLastNotes);
 
 function getLastNotes() {
+    var url;
+    if($("#switcher").val()==="last") {
+         url =  "notes/getLastNotes";
+    }else{
+         url =  "notes/getAllNotes";
+    }
     $.ajax({
-        url: "notes/getLastNotes",
+        url: url,
         type: 'GET',
         dataType: 'json',
         contentType: 'application/json',
@@ -147,6 +165,8 @@ function selectNote(tmp){
         }
     })
 };
+
+
 
 
 

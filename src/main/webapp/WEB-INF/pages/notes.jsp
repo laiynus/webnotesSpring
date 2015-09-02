@@ -28,9 +28,11 @@
             <button class="btn btn-success" id="addNote">Add note</button>
             <button class="btn btn-warning" id="editNote" disabled="true">Edit note</button>
             <button class="btn btn-danger" id="deleteNote" disabled="true">Delete note</button>
+            <button class="btn btn-info" id="switcherNote" style="float: right;">Show all notes</button>
             <br>
             <br>
             <input hidden id="selectedNote" />
+            <input hidden id="switcher" value="last" />
             <textarea class="form-control custom-control" id="noteText" rows="3" style="resize:vertical" placeholder="Enter your note"></textarea>
             <br>
             <br>

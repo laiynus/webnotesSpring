@@ -35,7 +35,7 @@ public class UserController {
         }
         model.setViewName("sign");
         if (!(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken)) {
-            return new ModelAndView("forward:/lastnotes");
+            return new ModelAndView("redirect:/notes");
         }
         return model;
     }
@@ -45,7 +45,7 @@ public class UserController {
         ModelAndView model = new ModelAndView();
         model.setViewName("registration");
         if (!(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken)) {
-            return new ModelAndView("forward:/lastnotes");
+            return new ModelAndView("redirect:/notes");
         }
         User newUser = new User();
         model.addObject("user", newUser);
@@ -68,7 +68,7 @@ public class UserController {
             authenticationManager.authenticate(auth);
             if(auth.isAuthenticated()) {
                 SecurityContextHolder.getContext().setAuthentication(auth);
-                model.setViewName("redirect:/lastnotes");
+                model.setViewName("redirect:/notes");
                 return model;
             }
         } catch (Exception e) {
