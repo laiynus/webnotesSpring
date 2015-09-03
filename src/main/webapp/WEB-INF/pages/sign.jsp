@@ -62,8 +62,7 @@
                         <div class="form-group">
                             <div class="col-sm-offset-3 col-sm-9">
                                 <div class="checkbox">
-                                    <label> <input type="checkbox" name="remember-me" />Remember me
-                                    </label>
+                                    <label><input type="checkbox" name="remember-me" id="remember-me"/>Remember me</label>
                                 </div>
                             </div>
                         </div>

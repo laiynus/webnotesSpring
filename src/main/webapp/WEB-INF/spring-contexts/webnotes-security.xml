@@ -9,21 +9,23 @@
 
     <security:http auto-config="true" use-expressions="true" authentication-manager-ref="authenticationManager">
         <security:intercept-url pattern="/notes" access="hasRole('ROLE_USER')" />
-        <security:access-denied-handler error-page="/403" />
         <security:form-login default-target-url="/notes"
                              login-page="/sign"
                              login-processing-url="/login"
                              username-parameter="username"
                              password-parameter="password"
                              authentication-failure-url="/sign?error" />
-        <security:logout logout-success-url="/sign?logout"
-                         logout-url="/logout"
-                         delete-cookies="JSESSIONID"/>
-    <security:csrf disabled="false"/>
+        <security:logout logout-success-url="/sign?logout" logout-url="/logout" delete-cookies="JSESSIONID"/>
+        <security:remember-me data-source-ref="dataSource" token-validity-seconds="10000" remember-me-parameter="remember-me"/>
+        <security:csrf disabled="false"/>
     </security:http>
 
     <security:authentication-manager id="authenticationManager">
-        <security:authentication-provider user-service-ref="usersServiceImplement" />
+        <security:authentication-provider user-service-ref="usersServiceImplement">
+            <security:password-encoder ref="passwordEncoder"/>
+        </security:authentication-provider>
     </security:authentication-manager>
+
+    <bean class="org.springframework.security.authentication.encoding.ShaPasswordEncoder" id="passwordEncoder"/>
 
 </beans>

@@ -5,10 +5,11 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/bootstrap/bootstrap.css"/>">
     <script type="text/javascript" src="<c:url value="/resources/js/bootstrap/bootstrap.min.js"/>"></script>
     <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/customstyles.css"/>">
+    <script type="text/javascript" src="<c:url value="/resources/js/registration.js"/>"></script>
     <meta name="_csrf" content="${_csrf.token}"/>
     <meta name="_csrf_header" content="${_csrf.headerName}"/>
 </head>
@@ -22,7 +23,7 @@
 <br>
 <div class="container">
     <div class="row">
-        <div class="col-md-4 col-md-offset-7">
+        <div class="col-md-5 col-md-offset-7">
             <div class="panel panel-default">
                 <div class="panel-heading">Sign Up</div>
                 <div class="panel-body">
@@ -32,33 +33,40 @@
                                 ${error}
                         </div>
                     </c:if>
-                    <form:form method="post" class="form-horizontal" role="form" modelAttribute="user" id="registrationForm" name="registrationForm" action="registrationUser">
-                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                    <form class="form-horizontal" role="form" id="registrationForm" name="registrationForm">
                         <div class="form-group">
-                            <form:label path="username" for="username"
-                                        class="col-sm-3 control-label">Login</form:label>
+                            <label  for="username"
+                                        class="col-sm-2 control-label">Login</label>
                             <div class="col-sm-9">
-                                <form:input type="text" class="form-control" id="username" required="true"
-                                            placeholder="Login" name="username/>" path="username" />
+                                <input type="text" class="form-control" id="username" required="true"
+                                            placeholder="Login" name="username" />
                             </div>
                         </div>
                         <div class="form-group">
-                            <form:label path="password" for="password"
-                                        class="col-sm-3 control-label">Password</form:label>
+                            <label  for="password"
+                                        class="col-sm-2 control-label">Password</label>
                             <div class="col-sm-9">
-                                <form:input type="password" class="form-control" id="password" required="true"
-                                            placeholder="Password" name="password/>" path="password" />
+                                <input type="password" class="form-control" id="password" required="true"
+                                            placeholder="Password" name="password" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirmPassword"
+                                        class="col-sm-2 control-label">Confirm Password</label>
+                            <div class="col-sm-9">
+                                <input type="password" class="form-control" id="confirmPassword" required="true"
+                                            placeholder="Please confirm your password" name="confirmPassword"  />
                             </div>
                         </div>
                         <div class="form-group last">
-                            <div class="col-sm-offset-3 col-sm-9">
-                                <button type="submit" id="submit" name="submit"
+                            <div class="col-sm-offset-2 col-sm-9">
+                                <button type="button" id="registredUser" name="registredUser"
                                         class="btn btn-success btn-sm">Sign Up</button>
                                 <button type="reset" class="btn btn-default btn-sm">
                                     Reset</button>
                             </div>
                         </div>
-                    </form:form>
+                    </form>
                 </div>
             </div>
         </div>

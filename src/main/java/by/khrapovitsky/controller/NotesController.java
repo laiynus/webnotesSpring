@@ -5,6 +5,7 @@ import by.khrapovitsky.model.User;
 import by.khrapovitsky.service.NotesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,7 +16,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -24,7 +24,7 @@ public class NotesController {
 
     @Autowired
     private NotesService notesService;
-
+    
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView defaultPage() {
         ModelAndView model = new ModelAndView();
@@ -32,73 +32,87 @@ public class NotesController {
         return model;
     }
 
+    @Secured("isAuthenticated()")
     @RequestMapping(value = "addNote", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody Note addNote(@RequestBody Note noteText) throws IOException {
-        Note note = null;
-        if (SecurityContextHolder.getContext().getAuthentication().isAuthenticated()) {
-            note = new Note((new User(SecurityContextHolder.getContext().getAuthentication().getName(), null)), noteText.getNote(), new Timestamp(new java.util.Date().getTime()));
-            notesService.insert(note);
+    public @ResponseBody String addNote(@RequestBody Note note) throws IOException {
+        if(note.getNote() == null || note.getNote().isEmpty()){
+            return "Note can't be empty!";
+        }else{
+            if(note.getNote().length()>1000){
+                return "The maximum note length is 1000 characters!";
+            }else{
+                note.setUser(new User(SecurityContextHolder.getContext().getAuthentication().getName(), null));
+                note.setDateTimeCreate(new Timestamp(new java.util.Date().getTime()));
+                notesService.insert(note);
+                return "Success";
+            }
         }
-        return note;
     }
 
+    @Secured("isAuthenticated()")
     @RequestMapping(value = "getLastNotes",method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody List<Note> getLastNotes(){
-        List<Note> lastNotesList = new ArrayList<>();
-        if(SecurityContextHolder.getContext().getAuthentication().isAuthenticated()){
-            lastNotesList = notesService.getLastUserNotes(new User(SecurityContextHolder.getContext().getAuthentication().getName(), null));
-        }
+        List<Note> lastNotesList;
+        lastNotesList = notesService.getLastUserNotes(new User(SecurityContextHolder.getContext().getAuthentication().getName(), null));
         return lastNotesList;
     }
 
+    @Secured("isAuthenticated()")
     @RequestMapping(value = "getAllNotes",method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody List<Note> getAllNotes(){
-        List<Note> allNotesList = new ArrayList<>();
-        if(SecurityContextHolder.getContext().getAuthentication().isAuthenticated()){
-            allNotesList = notesService.getUserNotes(new User(SecurityContextHolder.getContext().getAuthentication().getName(), null));
-        }
+        List<Note> allNotesList;
+        allNotesList = notesService.getUserNotes(new User(SecurityContextHolder.getContext().getAuthentication().getName(), null));
         return allNotesList;
     }
 
+    @Secured("isAuthenticated()")
     @RequestMapping(value = "deleteNote",method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody String deleteNote(@RequestBody Note tmpNote){
-        if(SecurityContextHolder.getContext().getAuthentication().isAuthenticated()){
-            Note note = notesService.getNoteWithUser(tmpNote.getId());
-            if (note != null) {
-                if(note.getUser().getUsername().equals(SecurityContextHolder.getContext().getAuthentication().getName())){
-                    notesService.delete(note);
-                    return "Success";
-                }
+        Note note = notesService.getNoteWithUser(tmpNote.getId());
+        if (note != null) {
+            if (note.getUser().getUsername().equals(SecurityContextHolder.getContext().getAuthentication().getName())) {
+                notesService.delete(note);
+                return "Success";
+            }else{
+                return "Access denied!";
             }
         }
-        return "Fail";
+        return "This note is not found!";
     }
 
+    @Secured("isAuthenticated()")
     @RequestMapping(value = "editNote",method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody String editNote(@RequestBody Note tmpNote){
-        if(SecurityContextHolder.getContext().getAuthentication().isAuthenticated()){
-            Note note = notesService.getNoteWithUser(tmpNote.getId());
-            if (note != null) {
-                if(note.getUser().getUsername().equals(SecurityContextHolder.getContext().getAuthentication().getName())){
-                    note.setDateTimeCreate( new Timestamp(new java.util.Date().getTime()));
-                    note.setNote(tmpNote.getNote());
-                    notesService.update(note);
-                    return "Success";
+    public @ResponseBody String editNote(@RequestBody Note note){
+        if(note.getNote() == null || note.getNote().isEmpty()){
+            return "Note can't be empty!";
+        }else {
+            if(note.getNote().length()>1000){
+                return "The maximum note length is 1000 characters!";
+            }else {
+                Note tmpNote = notesService.getNoteWithUser(note.getId());
+                if (tmpNote != null) {
+                    if (tmpNote.getUser().getUsername().equals(SecurityContextHolder.getContext().getAuthentication().getName())) {
+                        tmpNote.setDateTimeCreate(new Timestamp(new java.util.Date().getTime()));
+                        tmpNote.setNote(note.getNote());
+                        notesService.update(tmpNote);
+                        return "Success";
+                    } else {
+                        return "Access denied!";
+                    }
                 }
             }
         }
-        return "Fail";
+        return "This note is not found!";
     }
 
+    @Secured("isAuthenticated()")
     @RequestMapping(value = "getNote",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody Note getNote(@RequestBody Note note){
-        if(SecurityContextHolder.getContext().getAuthentication().isAuthenticated()){
-           if(notesService.getNote(note.getId())!=null){
-               if(notesService.getNoteWithUser(note.getId()).getUser().getUsername().equals(SecurityContextHolder.getContext().getAuthentication().getName())){
-                   Note requestNote = notesService.getNote(note.getId());
-                   return requestNote;
-               }
-           }
+        if (notesService.getNote(note.getId()) != null) {
+            if (notesService.getNoteWithUser(note.getId()).getUser().getUsername().equals(SecurityContextHolder.getContext().getAuthentication().getName())) {
+                Note requestNote = notesService.getNote(note.getId());
+                return requestNote;
+            }
         }
         return null;
     }

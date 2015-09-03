@@ -2,17 +2,22 @@ package by.khrapovitsky.controller;
 
 import by.khrapovitsky.model.User;
 import by.khrapovitsky.service.UsersService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.Map;
 
 @Controller
 public class UserController {
@@ -23,6 +28,9 @@ public class UserController {
     @Autowired
     @Qualifier("authenticationManager")
     private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private ShaPasswordEncoder passwordEncoder;
 
     @RequestMapping(value = {"/sign**", "/"}, method = RequestMethod.GET)
     public ModelAndView login(@RequestParam(value = "error", required = false) String error, @RequestParam(value = "logout", required = false) String logout) {
@@ -47,35 +55,42 @@ public class UserController {
         if (!(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken)) {
             return new ModelAndView("redirect:/notes");
         }
-        User newUser = new User();
-        model.addObject("user", newUser);
         return model;
     }
 
+    @Secured("isAnonymous()")
     @RequestMapping(value = {"registrationUser"}, method = RequestMethod.POST)
-    public ModelAndView registerUser(@ModelAttribute("user") User user) {
-        ModelAndView model = new ModelAndView();
+    public @ResponseBody String registerUser(@RequestBody Object object) {
+        User user = new User((String)((Map)object).get("username"),(String)((Map)object).get("password"));
+        String confirmPassword = (String)((Map)object).get("confirmPassword");
+        if (user.getPassword() == null || user.getPassword().isEmpty() || confirmPassword == null || confirmPassword.isEmpty() || user.getUsername() == null || user.getUsername().isEmpty()) {
+            return "All fields are required!";
+        }
+        if(!StringUtils.isAlphanumeric(user.getUsername()) || !StringUtils.isAlphanumeric(user.getPassword()) || ! StringUtils.isAlphanumeric(confirmPassword)){
+            return "Login and password must contains only letters or numbers!";
+        }
+        String password = user.getPassword();
         if(usersService.getUser(user.getUsername())!=null){
-            model.addObject("error","This user already exist!");
-            model.setViewName("registration");
-            return model;
+            return "This user already exist!";
         }else{
+            if(!user.getPassword().equals(confirmPassword)){
+                return "Passwords aren't match!";
+            }
+            user.setPassword(passwordEncoder.encodePassword(password,null));
             usersService.insert(user);
         }
         try {
             UserDetails userDetails = usersService.getUser(user.getUsername());
-            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userDetails, user.getPassword(), userDetails.getAuthorities());
+            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userDetails, password, userDetails.getAuthorities());
             authenticationManager.authenticate(auth);
             if(auth.isAuthenticated()) {
                 SecurityContextHolder.getContext().setAuthentication(auth);
-                model.setViewName("redirect:/notes");
-                return model;
+                return "Success";
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        model.setViewName("redirect:/sign");
-        return model;
+        return "You have registered successfully, but automatic authorization is failed.Please log in manually.";
     }
 
 }
