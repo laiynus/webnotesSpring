@@ -2,7 +2,6 @@ package by.khrapovitsky.controller;
 
 import by.khrapovitsky.model.User;
 import by.khrapovitsky.service.UsersService;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.annotation.Secured;
@@ -18,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Map;
+
+import static org.apache.commons.lang3.StringUtils.*;
 
 @Controller
 public class UserController {
@@ -66,7 +67,7 @@ public class UserController {
         if (user.getPassword() == null || user.getPassword().isEmpty() || confirmPassword == null || confirmPassword.isEmpty() || user.getUsername() == null || user.getUsername().isEmpty()) {
             return "All fields are required!";
         }
-        if(!StringUtils.isAlphanumeric(user.getUsername()) || !StringUtils.isAlphanumeric(user.getPassword()) || ! StringUtils.isAlphanumeric(confirmPassword)){
+        if(!isAlphanumeric(user.getUsername()) || !isAlphanumeric(user.getPassword()) || ! isAlphanumeric(confirmPassword)){
             return "Login and password must contains only letters or numbers!";
         }
         String password = user.getPassword();

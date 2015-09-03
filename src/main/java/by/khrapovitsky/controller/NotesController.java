@@ -110,8 +110,7 @@ public class NotesController {
     public @ResponseBody Note getNote(@RequestBody Note note){
         if (notesService.getNote(note.getId()) != null) {
             if (notesService.getNoteWithUser(note.getId()).getUser().getUsername().equals(SecurityContextHolder.getContext().getAuthentication().getName())) {
-                Note requestNote = notesService.getNote(note.getId());
-                return requestNote;
+                return notesService.getNote(note.getId());
             }
         }
         return null;

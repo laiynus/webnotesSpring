@@ -3,7 +3,6 @@ package by.khrapovitsky.dao;
 import by.khrapovitsky.model.Note;
 import by.khrapovitsky.model.User;
 import org.hibernate.Hibernate;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -11,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -33,7 +31,7 @@ public class NotesDAOImplement implements NotesDAO {
         sessionFactory.getCurrentSession().update(note);
     }
 
-    public List<Note> getAllNotes() {
+    public List getAllNotes() {
         return sessionFactory.getCurrentSession().createCriteria(Note.class).list();
     }
 
@@ -47,11 +45,11 @@ public class NotesDAOImplement implements NotesDAO {
         return note;
     }
 
-    public List<Note> getLastUserNotes(User user) {
+    public List getLastUserNotes(User user) {
         return sessionFactory.getCurrentSession().createCriteria(Note.class).add(Restrictions.like("user", user)).addOrder(Order.desc("dateTimeCreate")).setMaxResults(10).list();
     }
 
-    public List<Note> getUserNotes(User user) {
+    public List getUserNotes(User user) {
         return sessionFactory.getCurrentSession().createCriteria(Note.class).add(Restrictions.like("user", user)).addOrder(Order.desc("dateTimeCreate")).list();
     }
 }

@@ -3,7 +3,6 @@ package by.khrapovitsky.dao;
 import by.khrapovitsky.model.User;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -26,7 +25,7 @@ public class UsersDAOImplement implements UsersDAO {
         sessionFactory.getCurrentSession().update(user);
     }
 
-    public List<User> getAllUsers() {
+    public List getAllUsers() {
         return sessionFactory.getCurrentSession().createCriteria(User.class).list();
     }
 

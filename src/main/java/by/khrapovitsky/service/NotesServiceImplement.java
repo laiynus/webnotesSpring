@@ -32,7 +32,7 @@ public class NotesServiceImplement implements NotesService {
     }
 
     @Override
-    public List<Note> getAllNotes() {
+    public List getAllNotes() {
         return notesDAO.getAllNotes();
     }
 
@@ -47,12 +47,12 @@ public class NotesServiceImplement implements NotesService {
     }
 
     @Override
-    public List<Note> getLastUserNotes(User user) {
+    public List getLastUserNotes(User user) {
         return notesDAO.getLastUserNotes(user);
     }
 
     @Override
-    public List<Note> getUserNotes(User user) {
+    public List getUserNotes(User user) {
         return notesDAO.getUserNotes(user);
     }
 }

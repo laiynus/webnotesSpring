@@ -34,7 +34,7 @@ public class UsersServiceImplement implements UsersService, UserDetailsService{
     }
 
     @Override
-    public List<User> getAllUsers() {
+    public List getAllUsers() {
         return usersDAO.getAllUsers();
     }
 
@@ -49,7 +49,6 @@ public class UsersServiceImplement implements UsersService, UserDetailsService{
     }
 
     public User findByUserName(String login){
-        User user = usersDAO.getUser(login);
-        return user;
+        return usersDAO.getUser(login);
     }
 }

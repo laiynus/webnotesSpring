@@ -9,9 +9,9 @@ public interface NotesService {
     void delete(Note note);
     void insert(Note note);
     void update(Note note);
-    List<Note> getAllNotes();
+    List getAllNotes();
     Note getNote(int id);
     Note getNoteWithUser(int id);
-    List<Note> getLastUserNotes(User user);
-    List<Note> getUserNotes(User user);
+    List getLastUserNotes(User user);
+    List getUserNotes(User user);
 }
